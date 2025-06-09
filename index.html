@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMSng - Minecraft服务器</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <a href="#">IMSng</a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">首页</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">服务器信息 <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#intro">基本介绍</a>
+                        <a href="#gameplay">核心玩法</a>
+                        <a href="#rules">服务器规则</a>
+                        <a href="#tech">技术与优化</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">加入我们 <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#join">登入方式</a>
+                        <a href="https://map.IMSng.cn" target="_blank">服务器地图</a>
+                        <a href="https://qm.qq.com/q/CUrwVL8nU4" target="_blank">官方QQ群</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">常见问题 <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#faq">FAQ</a>
+                        <a href="#contact">联系我们</a>
+                    </div>
+                </li>
+            </ul>
+            <button class="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 首屏 -->
+    <header class="hero">
+        <!-- 装饰性背景元素 - Minecraft风格 -->
+        <div class="hero-decoration">
+            <!-- Minecraft方块背景网格 -->
+            <div class="minecraft-grid"></div>
+            
+            <!-- Minecraft天空元素 -->
+            <div class="minecraft-sky">
+                <!-- 太阳/月亮 -->
+                <div id="minecraft-celestial"></div>
+                
+                <!-- 天气系统 -->
+                <div id="minecraft-weather">
+                    <!-- 雨滴 -->
+                    <div class="rain-container"></div>
+                    <!-- 雪花 -->
+                    <div class="snow-container"></div>
+                    <!-- 雷电 -->
+                    <div class="thunder-container"></div>
+                </div>
+            </div>
+            
+            <!-- 浮动的Minecraft方块 -->
+            <div class="minecraft-block grass-block" style="top: 15%; left: 8%; animation-delay: 0s; transform: rotate(15deg) scale(1.2);"></div>
+            <div class="minecraft-block stone-block" style="top: 65%; left: 12%; animation-delay: 3s; transform: rotate(-8deg);"></div>
+            <div class="minecraft-block diamond-block" style="top: 25%; right: 15%; animation-delay: 1.5s; transform: rotate(5deg) scale(0.9);"></div>
+            <div class="minecraft-block wood-block" style="top: 70%; right: 10%; animation-delay: 4.2s; transform: rotate(-12deg);"></div>
+            
+            <!-- Minecraft像素生物 -->
+            <div class="minecraft-mob creeper" style="bottom: 10%; left: 20%;"></div>
+            <div class="minecraft-mob steve" style="top: 20%; right: 25%;"></div>
+            
+            <!-- Minecraft工具和物品 -->
+            <div class="minecraft-item diamond-sword" style="top: 35%; left: 18%;"></div>
+            <div class="minecraft-item pickaxe" style="top: 15%; right: 20%;"></div>
+            <div class="minecraft-item apple" style="bottom: 25%; right: 40%;"></div>
+            <div class="minecraft-item chest" style="bottom: 30%; left: 40%;"></div>
+            
+            <!-- Minecraft粒子效果 -->
+            <div class="minecraft-particles">
+                <div class="xp-orb" style="--x: 30%; --y: 20%; --delay: 0s;"></div>
+                <div class="xp-orb" style="--x: 70%; --y: 40%; --delay: 1.3s;"></div>
+                <div class="xp-orb" style="--x: 20%; --y: 60%; --delay: 2.6s;"></div>
+                <div class="xp-orb" style="--x: 80%; --y: 30%; --delay: 3.9s;"></div>
+                <div class="xp-orb" style="--x: 50%; --y: 75%; --delay: 5.2s;"></div>
+            </div>
+            
+            <!-- 挖掘特效 -->
+            <div class="mining-effect" style="top: 40%; left: 25%;"></div>
+            <div class="mining-effect" style="top: 60%; right: 15%;"></div>
+            
+            <!-- 远景山脉 -->
+            <div class="minecraft-mountains">
+                <!-- 添加星星 -->
+                <div class="minecraft-star" style="left: 10%; top: 20%;"></div>
+                <div class="minecraft-star" style="left: 25%; top: 10%;"></div>
+                <div class="minecraft-star" style="left: 45%; top: 15%;"></div>
+                <div class="minecraft-star" style="left: 65%; top: 5%;"></div>
+                <div class="minecraft-star" style="left: 80%; top: 12%;"></div>
+                <div class="minecraft-star" style="left: 95%; top: 18%;"></div>
+                
+                <!-- 添加萤火虫 -->
+                <div class="minecraft-firefly" style="left: 20%; bottom: 20%; animation-delay: 0s;"></div>
+                <div class="minecraft-firefly" style="left: 40%; bottom: 25%; animation-delay: 2s;"></div>
+                <div class="minecraft-firefly" style="left: 60%; bottom: 15%; animation-delay: 1s;"></div>
+                <div class="minecraft-firefly" style="left: 75%; bottom: 30%; animation-delay: 3s;"></div>
+                <div class="minecraft-firefly" style="left: 85%; bottom: 18%; animation-delay: 1.5s;"></div>
+                
+                <!-- 添加小型飘落粒子 -->
+                <div class="minecraft-mountain-particles"></div>
+            </div>
+            
+            <!-- 添加第二层山脉 - 独立元素 -->
+            <div class="minecraft-mountains-second"></div>
+            
+            <!-- 添加独立的树木和石头元素 -->
+            <div class="minecraft-scenery">
+                <!-- 远景树木 -->
+                <div class="minecraft-tree" style="left: 10%; bottom: 5%;"></div>
+                <div class="minecraft-tree" style="left: 25%; bottom: 3%;"></div>
+                <div class="minecraft-tree" style="left: 40%; bottom: 7%;"></div>
+                <div class="minecraft-tree" style="left: 60%; bottom: 4%;"></div>
+                <div class="minecraft-tree" style="left: 75%; bottom: 6%;"></div>
+                <div class="minecraft-tree" style="left: 90%; bottom: 5%;"></div>
+                
+                <!-- 装饰性岩石 -->
+                <div class="minecraft-rock" style="left: 15%; bottom: 5%;"></div>
+                <div class="minecraft-rock" style="left: 35%; bottom: 7%;"></div>
+                <div class="minecraft-rock" style="left: 55%; bottom: 4%;"></div>
+                <div class="minecraft-rock" style="left: 80%; bottom: 6%;"></div>
+            </div>
+            
+            <!-- 添加云朵 -->
+            <div class="minecraft-cloud-container">
+                <div class="minecraft-cloud" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+                <div class="minecraft-cloud" style="top: 15%; left: 30%; animation-delay: 10s;"></div>
+                <div class="minecraft-cloud" style="top: 25%; left: 50%; animation-delay: 5s;"></div>
+                <div class="minecraft-cloud" style="top: 18%; left: 70%; animation-delay: 15s;"></div>
+            </div>
+        </div>
+        
+        <!-- 主题适配的渐变覆盖层 -->
+        <div class="overlay-gradient"></div>
+        
+        <div class="hero-container">
+            <h1>欢迎来到 IMSng</h1>
+            <h2>基于 Fabric 1.20.4 的跨平台 Minecraft 世界</h2>
+            <div class="hero-buttons">
+                <a href="https://map.IMSng.cn" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-map"></i> 前往网页地图
+                </a>
+                <a href="https://qm.qq.com/q/CUrwVL8nU4" class="btn btn-secondary" target="_blank">
+                    <i class="fab fa-qq"></i> 加入官方QQ群
+                </a>
+            </div>
+        </div>
+        <!-- 主题切换按钮 -->
+        <div class="theme-toggle">
+            <button id="theme-toggle-btn">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 服务器介绍 -->
+    <main>
+        <section class="intro" id="intro">
+            <div class="container">
+                <h2 class="section-title">服务器介绍</h2>
+                <div class="intro-content">
+                    <div class="intro-card">
+                        <h3>版本平台</h3>
+                        <p>JAVA Fabric 1.20.4</p>
+                    </div>
+                    <div class="intro-card">
+                        <h3>服务器特色</h3>
+                        <p>Java 与基岩互通，Java 端不限正版／非正版，基岩端需微软登录，都需要通过专属 QQ 群验证。</p>
+                        <p>有LuckPerms权限管理，全玩家下发tp指令，限制op管理权限，无VIP特权。内置所需模组与优化。不换周目，永不删档。不限生电/大型机器，欢迎各类玩家加入。</p>
+                    </div>
+                    <div class="intro-card">
+                        <h3>硬件配置</h3>
+                        <p>Intel Core i7-14700K + 10 GB RAM，提供稳定流畅的游戏体验</p>
+                    </div>
+                    <div class="intro-card">
+                        <h3>玩法定位</h3>
+                        <ul class="features-list">
+                            <li><i class="fas fa-seedling"></i> 生存向</li>
+                            <li><i class="fas fa-bolt"></i> 生电向</li>
+                            <li><i class="fas fa-landmark"></i> 建筑向</li>
+                            <li><i class="fas fa-magic"></i> 指令向（不会发op，限制较大详细规制见条目四）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-server"></i></div>
+        </div>
+
+        <section class="about" id="about">
+            <div class="container">
+                <h2 class="section-title">关于MC服务器</h2>
+                <p>本服务器已经开服一年多了，经历了由单人存档到radmin到frp到简幻欢再到云服务器的过程。在不断的优化和增加功能后，我决定将服务器对外公开。在漫长的时间道路上，感谢各位玩家的一路陪伴。</p>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-gamepad"></i></div>
+        </div>
+
+        <section class="gameplay" id="gameplay">
+            <div class="container">
+                <h2 class="section-title">核心玩法</h2>
+                
+                <div class="gameplay-card">
+                    <div class="gameplay-icon">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <div class="gameplay-content">
+                        <h3>1. 生存探索</h3>
+                        <p>服务器开启了1.21预览实验性玩法，可以体验1.21生存冒险新内容。服务器开启了死亡不掉落且下发tp指令，无后顾之忧。</p>
+                    </div>
+                </div>
+                
+                <div class="gameplay-card">
+                    <div class="gameplay-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="gameplay-content">
+                        <h3>2. 生存电路</h3>
+                        <p>服务器不限制生电，你可以自由建造你所想建造的机器（无功能的卡服机除外）。</p>
+                    </div>
+                </div>
+                
+                <div class="gameplay-card">
+                    <div class="gameplay-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="gameplay-content">
+                        <h3>3. 建筑设计</h3>
+                        <p>自由地建造你所想建造的建筑。服务器的方块小镇MOD可以使你的建筑更加美观，服务器内的生电机器可以让你的建筑过程更加便捷。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-users"></i></div>
+        </div>
+
+        <section class="team" id="team">
+            <div class="container">
+                <h2 class="section-title">管理团队</h2>
+                <p>由腐竹与资深玩家（两位生电、一位指令）组成，腐竹会及时处理举报、技术疑难与新手问题。</p>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-gavel"></i></div>
+        </div>
+
+        <section class="rules" id="rules">
+            <div class="container">
+                <h2 class="section-title">规则及告知</h2>
+                <div class="rules-grid">
+                    <div class="rule-item">
+                        <h3><i class="fas fa-exclamation-triangle"></i> 禁止破坏</h3>
+                        <p>在不影响整体美观及功能下你可以自由建筑。未经同意不得破坏及修改他人建筑。禁止乱拆生电机器。不要乱修改其中任意一个部件。优化必须经过相应作者允许。</p>
+                    </div>
+                    <div class="rule-item">
+                        <h3><i class="fas fa-comments"></i> 友善交流</h3>
+                        <p>严禁人身攻击、种族歧视、政治宗教话题；对话中请保持尊重与耐心。</p>
+                    </div>
+                    <div class="rule-item">
+                        <h3><i class="fas fa-shield-alt"></i> 防骗措施</h3>
+                        <p>任何官方渠道均不会让你转账、泄露密码；服务器没有VIP，SVIP，除管理以外的op等一切特权。遇到请在群内先行核实。</p>
+                    </div>
+                    <div class="rule-item">
+                        <h3><i class="fas fa-terminal"></i> 指令玩家和OP</h3>
+                        <p>目前服务器内已开放的指令已经足够普通玩家使用，故不会给op给普通玩家。如果你想在服务器内建造指令小游戏请联系腐竹并提供相应地图。如果你有代码/技术或解决现有问题的能力且有意愿改善服务器，请联系腐竹。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-cogs"></i></div>
+        </div>
+
+        <section class="tech" id="tech">
+            <div class="container">
+                <h2 class="section-title">技术与性能保障</h2>
+                
+                <div class="tech-section">
+                    <h3>1. 性能优化</h3>
+                    <ul>
+                        <li><strong>核心优化：</strong>优化mod由腐竹整理保证发挥电脑最好的性能与兼容性支持。</li>
+                        <li><strong>插件精简：</strong>仅挑选必要的防护、监控与优化插件。客户端无需安装。</li>
+                        <li><strong>必要模组下载：</strong>
+                            <ol>
+                                <li>使用服务器内优化一键包：<br>
+                                Automodpack</li>
+                                <li>自己配置：<br>
+                                architectury-11.1.17-fabric.jar<br>
+                                yuushya-modelling-1.20.4-fabric-2.2.0.jar<br>
+                                yuushya-1.20.4-fabric-2.2.2.jar</li>
+                            </ol>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="tech-section">
+                    <h3>2. 数据备份与安全</h3>
+                    <ul>
+                        <li><strong>自动存档：</strong>不定期手动备份。</li>
+                        <li><strong>DDoS 防护：</strong>独立ipv4 带有普防 有备用ip</li>
+                        <li><strong>权限系统：</strong>使用 LuckPerms 细分权限组，明确权限，无VIP组存在 仅有op与非op只区分 op均为管理团队成员 权限有限制</li>
+                        <li><strong>QQ群验证：</strong>每一位玩家都可被及时追溯。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-sign-in-alt"></i></div>
+        </div>
+
+        <section class="join" id="join">
+            <div class="container">
+                <h2 class="section-title">登入方式</h2>
+                <div class="join-methods">
+                    <div class="join-method">
+                        <i class="fab fa-java"></i>
+                        <h3>Java 版</h3>
+                        <p>不限正/盗版 正版无需设置密码 盗版需要设置密码</p>
+                    </div>
+                    <div class="join-method">
+                        <i class="fas fa-cubes"></i>
+                        <h3>基岩版</h3>
+                        <p>需微软登录</p>
+                    </div>
+                </div>
+                <p class="join-note">所有登入均需要QQ群验证</p>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-question-circle"></i></div>
+        </div>
+
+        <section class="faq" id="faq">
+            <div class="container">
+                <h2 class="section-title">常见问题</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>为什么要加 QQ 验证？</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>原本是没有的，但因为加了盗版密码登录，为了防止"熊"玩家乱刷屏／破坏 / 炸服并提供一个稳定的追溯路径，加强社区管理；同时可在群内及时发布公告，所以加了QQ群验证。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>服务器为什么选择1.20.4？</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>①1.20.4相比于之前版本有足够的mod生态 ②服务器内有依靠nbt的指令小游戏 因高版本nbt改变 升至1.20.5及以上版本会导致现有nbt指令不可用③1.20.4可以体验1.21的预览性更新</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>后面会考虑1.21吗？</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>如果能解决nbt的问题就升</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>服务器内的已有的op是怎么来的？</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>现服务器内的op（加上腐竹一共3位）来自最开始radmin时期的服务器的部分原始股且具有一定特长。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>怎么成为op？</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>不下发op，此点见条目四</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>automodpack是必装的吗？</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>不是必装的，你可以在安装必需mod后自己配置。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>服务器会删区块吗？</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>一般不会，除非区块内有无法处理的卡服器和禁人塔</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 装饰分隔元素 -->
+        <div class="section-divider">
+            <div class="section-divider-icon"><i class="fas fa-star"></i></div>
+        </div>
+
+        <section class="summary" id="summary">
+            <div class="container">
+                <h2 class="section-title">总结与展望</h2>
+                <p>我们致力于为玩家提供一个稳定、高效、有深度的跨平台 Minecraft 世界：</p>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>多样玩法</h3>
+                        <p>从普通生存到生存电路，再到创意建筑，你想要的玩法这里全都有</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-server"></i>
+                        <h3>技术保障</h3>
+                        <p>高端硬件＋腐竹运维＋防护系统，全方位护航服务器稳定运行</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-users"></i>
+                        <h3>社区氛围</h3>
+                        <p>规范管理，让每位玩家都能找到归属感与成就感</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-clock"></i>
+                        <h3>持续更新</h3>
+                        <p>例行维护、模组升级、长期陪伴</p>
+                    </div>
+                </div>
+                <div class="conclusion">
+                    <p>开启一段跨界探索与创造之旅吧！</p>
+                    <p>期待在方块世界中与你并肩前行，见证MC的无限可能！</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-topmost">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <h3>IMSng</h3>
+                        <p>基于 Fabric 1.20.4 的跨平台 Minecraft 世界</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4>快速链接</h4>
+                        <ul>
+                            <li><a href="#intro">服务器介绍</a></li>
+                            <li><a href="#gameplay">核心玩法</a></li>
+                            <li><a href="#rules">服务器规则</a></li>
+                            <li><a href="#join">登入方式</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-contact" id="contact">
+                        <h4>联系我们</h4>
+                        <p><a href="https://qm.qq.com/q/CUrwVL8nU4" target="_blank"><i class="fab fa-qq"></i> 官方QQ群</a></p>
+                         <p><a href="https://qm.qq.com/q/9iZkpiijOU" target="_blank"><i class="fab fa-qq"></i> 腐竹QQ</a></p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- 底面波浪效果 -->
+        <div class="footer-bottommost">
+            <div class="waves">
+                <div class="wave" id="wave1"></div>
+                <div class="wave" id="wave2"></div>
+                <div class="wave" id="wave3"></div>
+                <div class="wave" id="wave4"></div>
+            </div>
+            <ul class="social-icon">
+                <li style="--clr:#1877f2;"><a href="https://qm.qq.com/q/CUrwVL8nU4"><i class="fa-brands fa-qq"></i></a></li>
+                <li style="--clr:#05df05;"><a href="https://qm.qq.com/q/CUrwVL8nU4"><i class="fa-brands fa-weixin"></i></a></li>
+                <li style="--clr:#a33494;"><a href="https://b23.tv/aKw0hLM"><i class="fa-brands fa-bilibili"></i></a></li>
+                <li style="--clr:#020c1a;"><a href="https://b23.tv/aKw0hLM"><i class="fa-brands fa-tiktok"></i></a></li>
+            </ul>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 IMSng Minecraft服务器. 保留所有权利.</p>
+            </div>
+        </div>
+    
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
