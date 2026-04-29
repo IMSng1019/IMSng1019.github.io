@@ -215,6 +215,23 @@
 
 <script>
     const STEPS_PER_GAME = 5;
+    const FALLBACK_PACKS = [
+        {
+            name: 'default.json',
+            data: {
+                pack: 'default',
+                author: 'CS-LX',
+                authorUrl: 'https://github.com/CS-LX',
+                items: [
+                    { ref: 'imgs/default/1_T.png', verify: 'imgs/default/1_B.png', target: { x: 0.485, y: 0.405, radius: 50 } },
+                    { ref: 'imgs/default/2_T.png', verify: 'imgs/default/2_B.png', target: { x: 0.263, y: 0.481, radius: 50 } },
+                    { ref: 'imgs/default/3_T.png', verify: 'imgs/default/3_B.png', target: { x: 0.343, y: 0.392, radius: 50 } },
+                    { ref: 'imgs/default/4_T.png', verify: 'imgs/default/4_B.png', target: { x: 0.636, y: 0.568, radius: 50 } },
+                    { ref: 'imgs/default/5_T.png', verify: 'imgs/default/5_B.png', target: { x: 0.242, y: 0.091, radius: 41 } }
+                ]
+            }
+        }
+    ];
 
     let roundItems = [];
     let currentIndex = 0;
@@ -267,7 +284,7 @@
         return null;
     }
 
-    async function init() {
+    async function loadPacks() {
         try {
             const manifestRes = await fetch('configs/manifest.json');
             if (!manifestRes.ok) throw new Error('无法读取 configs/manifest.json');
@@ -283,10 +300,18 @@
                     })
                 )
             );
+            return results.map((res, i) => ({ res, name: packFiles[i] }));
+        } catch (err) {
+            console.warn('[Circle] 配置文件读取失败，使用内置默认关卡:', err);
+            return FALLBACK_PACKS.map(pack => ({ res: { status: 'fulfilled', value: pack }, name: pack.name }));
+        }
+    }
 
+    async function init() {
+        try {
+            const results = await loadPacks();
             const pool = [];
-            results.forEach((res, i) => {
-                const name = packFiles[i];
+            results.forEach(({ res, name }) => {
                 if (res.status !== 'fulfilled') {
                     console.warn('[Circle] 跳过 pack', name, ':', res.reason);
                     return;
