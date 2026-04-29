@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMSng 伪论坛帖子</title>
+    <style>
+        :root {
+            --bg: #f3f6fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --primary: #2563eb;
+            --code: #111827;
+            --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 30%), var(--bg);
+            color: var(--text);
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+        }
+
+        a {
+            color: var(--primary);
+        }
+
+        .topbar {
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .topbar-inner,
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 22px;
+        }
+
+        .topbar-inner {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            color: var(--text);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .back-link {
+            border-radius: 999px;
+            padding: 10px 16px;
+            background: #eef2ff;
+            color: #3730a3;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .page {
+            padding-top: 32px;
+            padding-bottom: 48px;
+        }
+
+        .article-card {
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(229, 231, 235, 0.92);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .article-head {
+            padding: 30px;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(135deg, #ffffff, #f8fbff);
+        }
+
+        .article-head h1 {
+            margin: 0 0 10px;
+            font-size: clamp(28px, 6vw, 44px);
+            line-height: 1.2;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .article-body {
+            padding: 30px;
+            line-height: 1.85;
+            font-size: 16px;
+        }
+
+        .article-body h1,
+        .article-body h2,
+        .article-body h3,
+        .article-body h4,
+        .article-body h5,
+        .article-body h6 {
+            margin: 1.5em 0 0.65em;
+            line-height: 1.35;
+        }
+
+        .article-body h1:first-child,
+        .article-body h2:first-child,
+        .article-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .article-body p {
+            margin: 0 0 1em;
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin: 0 0 1em;
+            padding-left: 1.5em;
+        }
+
+        .article-body blockquote {
+            margin: 1em 0;
+            padding: 0.75em 1em;
+            border-left: 4px solid var(--primary);
+            background: #eff6ff;
+            color: #374151;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .article-body pre {
+            overflow-x: auto;
+            margin: 1em 0;
+            padding: 16px;
+            border-radius: 14px;
+            background: var(--code);
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        .article-body code {
+            border-radius: 6px;
+            padding: 2px 6px;
+            background: #eef2ff;
+            color: #3730a3;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.92em;
+        }
+
+        .article-body pre code {
+            padding: 0;
+            background: transparent;
+            color: inherit;
+        }
+
+        .error-box {
+            padding: 30px;
+            color: #991b1b;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 18px;
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="index.html">IMSng 伪论坛</a>
+            <a class="back-link" href="index.html">返回论坛首页</a>
+        </div>
+    </header>
+
+    <main class="page">
+        <article class="article-card">
+            <div class="article-head">
+                <h1 id="post-title">正在加载...</h1>
+                <div class="meta" id="post-meta">Markdown 静态帖子</div>
+            </div>
+            <div class="article-body" id="post-content">
+                <p>正在读取帖子内容...</p>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        const titleEl = document.getElementById('post-title');
+        const metaEl = document.getElementById('post-meta');
+        const contentEl = document.getElementById('post-content');
+
+        function escapeHtml(value) {
+            return value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeAttribute(value) {
+            return escapeHtml(value).replace(/`/g, '&#96;');
+        }
+
+        function isSafeUrl(url) {
+            try {
+                const parsed = new URL(url, window.location.href);
+                return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+            } catch {
+                return false;
+            }
+        }
+
+        function renderInline(text) {
+            let html = escapeHtml(text);
+            const codeParts = [];
+            html = html.replace(/`([^`]+)`/g, (_, code) => {
+                codeParts.push('<code>' + code + '</code>');
+                return '\u0000CODE' + (codeParts.length - 1) + '\u0000';
+            });
+            html = html.replace(/\[([^\]]+)\]\(([^\s)]+)\)/g, (match, label, url) => {
+                const decodedUrl = url.replace(/&amp;/g, '&');
+                if (!isSafeUrl(decodedUrl)) return label;
+                return '<a href="' + escapeAttribute(decodedUrl) + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+            });
+            html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            html = html.replace(/\u0000CODE(\d+)\u0000/g, (_, index) => codeParts[Number(index)]);
+            return html;
+        }
+
+        function flushParagraph(paragraph, output) {
+            if (!paragraph.length) return;
+            output.push('<p>' + renderInline(paragraph.join(' ')) + '</p>');
+            paragraph.length = 0;
+        }
+
+        function closeList(state, output) {
+            if (!state.type) return;
+            output.push('</' + state.type + '>');
+            state.type = null;
+        }
+
+        function renderMarkdown(markdown) {
+            const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+            const output = [];
+            const paragraph = [];
+            const listState = { type: null };
+            let inCode = false;
+            let codeLines = [];
+
+            lines.forEach((line) => {
+                if (/^```/.test(line.trim())) {
+                    if (inCode) {
+                        output.push('<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+                        codeLines = [];
+                        inCode = false;
+                    } else {
+                        flushParagraph(paragraph, output);
+                        closeList(listState, output);
+                        inCode = true;
+                    }
+                    return;
+                }
+
+                if (inCode) {
+                    codeLines.push(line);
+                    return;
+                }
+
+                if (!line.trim()) {
+                    flushParagraph(paragraph, output);
+                    closeList(listState, output);
+                    return;
+                }
+
+                const heading = line.match(/^(#{1,6})\s+(.+)$/);
+                if (heading) {
+                    flushParagraph(paragraph, output);
+                    closeList(listState, output);
+                    const level = heading[1].length;
+                    output.push('<h' + level + '>' + renderInline(heading[2]) + '</h' + level + '>');
+                    return;
+                }
+
+                const quote = line.match(/^>\s?(.+)$/);
+                if (quote) {
+                    flushParagraph(paragraph, output);
+                    closeList(listState, output);
+                    output.push('<blockquote>' + renderInline(quote[1]) + '</blockquote>');
+                    return;
+                }
+
+                const unordered = line.match(/^[-*+]\s+(.+)$/);
+                if (unordered) {
+                    flushParagraph(paragraph, output);
+                    if (listState.type !== 'ul') {
+                        closeList(listState, output);
+                        output.push('<ul>');
+                        listState.type = 'ul';
+                    }
+                    output.push('<li>' + renderInline(unordered[1]) + '</li>');
+                    return;
+                }
+
+                const ordered = line.match(/^\d+\.\s+(.+)$/);
+                if (ordered) {
+                    flushParagraph(paragraph, output);
+                    if (listState.type !== 'ol') {
+                        closeList(listState, output);
+                        output.push('<ol>');
+                        listState.type = 'ol';
+                    }
+                    output.push('<li>' + renderInline(ordered[1]) + '</li>');
+                    return;
+                }
+
+                closeList(listState, output);
+                paragraph.push(line.trim());
+            });
+
+            if (inCode) {
+                output.push('<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+            }
+            flushParagraph(paragraph, output);
+            closeList(listState, output);
+            return output.join('\n');
+        }
+
+        function titleFromFile(file) {
+            return file.replace(/\.md$/i, '');
+        }
+
+        function isSafePostFile(file) {
+            return typeof file === 'string' &&
+                file.toLowerCase().endsWith('.md') &&
+                !file.includes('/') &&
+                !file.includes('\\');
+        }
+
+        function showError(title, message) {
+            document.title = title + ' - IMSng 伪论坛';
+            titleEl.textContent = title;
+            metaEl.textContent = '无法显示帖子';
+            contentEl.innerHTML = '<div class="error-box">' + escapeHtml(message) + '</div>';
+        }
+
+        async function loadPost() {
+            const params = new URLSearchParams(window.location.search);
+            const file = params.get('file');
+
+            if (!file) {
+                showError('缺少帖子参数', '请从论坛首页点击帖子进入详情页。');
+                return;
+            }
+
+            try {
+                const manifestRes = await fetch('posts/index.json', { cache: 'no-store' });
+                if (!manifestRes.ok) throw new Error('帖子清单加载失败');
+                const manifest = await manifestRes.json();
+                const allowed = Array.isArray(manifest.posts) ? manifest.posts.filter(isSafePostFile) : [];
+
+                if (!isSafePostFile(file) || !allowed.includes(file)) {
+                    showError('帖子不存在', '该帖子未登记在帖子清单中，无法加载。');
+                    return;
+                }
+
+                const postRes = await fetch('posts/' + encodeURIComponent(file), { cache: 'no-store' });
+                if (!postRes.ok) {
+                    showError('帖子读取失败', '清单中存在该帖子，但文件无法读取。');
+                    return;
+                }
+
+                const markdown = await postRes.text();
+                const title = titleFromFile(file);
+                document.title = title + ' - IMSng 伪论坛';
+                titleEl.textContent = title;
+                metaEl.textContent = file + ' · Markdown 静态帖子';
+                contentEl.innerHTML = renderMarkdown(markdown);
+            } catch (err) {
+                console.error(err);
+                showError('加载失败', '读取帖子时出现问题，请稍后再试。');
+            }
+        }
+
+        loadPost();
+    </script>
+</body>
+</html>

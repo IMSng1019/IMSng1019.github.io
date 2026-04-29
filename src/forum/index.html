@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMSng 伪论坛</title>
+    <style>
+        :root {
+            --bg: #f3f6fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #16a34a;
+            --warning: #f97316;
+            --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 32%), var(--bg);
+            color: var(--text);
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .topbar-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand strong {
+            font-size: 22px;
+            letter-spacing: 0.04em;
+        }
+
+        .brand span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-link,
+        .login-btn,
+        .post-btn,
+        .modal-btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .home-link {
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .login-btn,
+        .modal-btn.primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+        }
+
+        .home-link:hover,
+        .login-btn:hover,
+        .post-btn:hover,
+        .modal-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:hover,
+        .modal-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .layout {
+            max-width: 1180px;
+            margin: 28px auto;
+            padding: 0 22px 44px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 22px;
+        }
+
+        .hero,
+        .panel,
+        .post-list,
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(229, 231, 235, 0.9);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero {
+            padding: 28px;
+            margin-bottom: 22px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            right: -50px;
+            top: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 45px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(22, 163, 74, 0.12));
+            transform: rotate(18deg);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(28px, 5vw, 42px);
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 620px;
+        }
+
+        .hero-badges {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: #f9fafb;
+            color: #374151;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .panel {
+            padding: 18px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .panel-title {
+            margin: 0 0 4px;
+            font-size: 18px;
+        }
+
+        .panel-text {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .post-btn {
+            background: #fef3c7;
+            color: #92400e;
+            white-space: nowrap;
+        }
+
+        .notice {
+            margin-top: 12px;
+            display: none;
+            border: 1px dashed #fdba74;
+            background: #fff7ed;
+            color: #9a3412;
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-size: 14px;
+        }
+
+        .post-list {
+            overflow: hidden;
+        }
+
+        .list-head {
+            padding: 18px 20px;
+            display: grid;
+            grid-template-columns: 1fr 110px 110px;
+            gap: 14px;
+            color: var(--muted);
+            border-bottom: 1px solid var(--line);
+            background: #f9fafb;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .post-item {
+            display: grid;
+            grid-template-columns: 1fr 110px 110px;
+            gap: 14px;
+            padding: 18px 20px;
+            align-items: center;
+            border-bottom: 1px solid var(--line);
+            transition: background 0.2s ease;
+        }
+
+        .post-item:last-child {
+            border-bottom: 0;
+        }
+
+        .post-item:hover {
+            background: #f8fbff;
+        }
+
+        .post-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            font-weight: 800;
+        }
+
+        .post-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            background: #dbeafe;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .post-name {
+            min-width: 0;
+        }
+
+        .post-name strong {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .post-name span {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .post-meta {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .sidebar-card {
+            padding: 20px;
+        }
+
+        .sidebar-card h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+        }
+
+        .section-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section-link:last-child {
+            border-bottom: 0;
+        }
+
+        .section-link span:first-child {
+            font-weight: 700;
+        }
+
+        .section-link span:last-child {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .small-note {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .status-box {
+            padding: 18px 20px;
+            color: var(--muted);
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.55);
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
+        .modal {
+            width: min(420px, 100%);
+            background: white;
+            border-radius: 22px;
+            box-shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+            overflow: hidden;
+        }
+
+        .modal-head {
+            padding: 22px;
+            color: white;
+            background: var(--primary);
+        }
+
+        .modal-head h2 {
+            margin: 0 0 6px;
+        }
+
+        .modal-head p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        .modal-question {
+            margin: 0 0 18px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .modal-actions {
+            display: grid;
+            gap: 12px;
+        }
+
+        .modal-btn.secondary {
+            color: #374151;
+            background: #f3f4f6;
+        }
+
+        .modal-close {
+            width: 100%;
+            margin-top: 12px;
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        @media (max-width: 860px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .list-head,
+            .post-item {
+                grid-template-columns: 1fr;
+            }
+
+            .list-head span:nth-child(n+2),
+            .post-meta {
+                display: none;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .topbar-inner,
+            .hero,
+            .panel {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .top-actions {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="../../index.html">
+                <strong>IMSng 伪论坛</strong>
+                <span>看起来很像论坛，但它真的只是静态页面</span>
+            </a>
+            <div class="top-actions">
+                <a class="home-link" href="../../index.html">返回首页</a>
+                <button class="login-btn" id="login-btn" type="button">登录</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="layout">
+        <section>
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>服务器社区讨论区</h1>
+                    <p>这里展示由 Markdown 文件维护的帖子。你可以浏览公告和讨论串，但不能真正登录、注册或发帖。</p>
+                    <div class="hero-badges">
+                        <span class="badge">分区：综合讨论</span>
+                        <span class="badge">权限：只读</span>
+                        <span class="badge">状态：假装在线</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div>
+                    <h2 class="panel-title">最新帖子</h2>
+                    <p class="panel-text">标题来自 Markdown 文件名，内容来自 posts 目录。</p>
+                    <div class="notice" id="post-notice">发帖功能暂未开放，因为这个论坛并没有真正的后端。</div>
+                </div>
+                <button class="post-btn" id="post-btn" type="button">发表新帖</button>
+            </div>
+
+            <div class="post-list">
+                <div class="list-head">
+                    <span>主题</span>
+                    <span>回复</span>
+                    <span>最后更新</span>
+                </div>
+                <div id="posts">
+                    <div class="status-box">正在加载帖子清单...</div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="sidebar-card">
+                <h2>论坛分区</h2>
+                <div class="section-link"><span>服务器公告</span><span>只读</span></div>
+                <div class="section-link"><span>新人报到</span><span>只读</span></div>
+                <div class="section-link"><span>建筑展示</span><span>只读</span></div>
+                <div class="section-link"><span>红石与生电</span><span>只读</span></div>
+            </div>
+            <div class="sidebar-card">
+                <h2>伪论坛提示</h2>
+                <p class="small-note">登录按钮会进入一段验证流程。它不会创建账号，也不会记录任何真实身份信息。</p>
+            </div>
+        </aside>
+    </main>
+
+    <div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <div class="modal">
+            <div class="modal-head">
+                <h2 id="login-title">统一身份验证</h2>
+                <p>请回答一个非常正常的问题以继续。</p>
+            </div>
+            <div class="modal-body">
+                <p class="modal-question">你是机器人吗？</p>
+                <div class="modal-actions">
+                    <button class="modal-btn primary" id="bot-login" type="button">是机器人</button>
+                    <button class="modal-btn secondary" id="human-login" type="button">不是机器人</button>
+                </div>
+                <button class="modal-close" id="modal-close" type="button">先不登录</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const postsContainer = document.getElementById('posts');
+        const postNotice = document.getElementById('post-notice');
+        const modal = document.getElementById('login-modal');
+
+        function titleFromFile(file) {
+            return file.replace(/\.md$/i, '');
+        }
+
+        function createPostItem(file, index) {
+            const item = document.createElement('a');
+            item.className = 'post-item';
+            item.href = 'post.html?file=' + encodeURIComponent(file);
+
+            const title = document.createElement('div');
+            title.className = 'post-title';
+
+            const icon = document.createElement('span');
+            icon.className = 'post-icon';
+            icon.textContent = index === 0 ? '告' : '帖';
+
+            const name = document.createElement('span');
+            name.className = 'post-name';
+
+            const strong = document.createElement('strong');
+            strong.textContent = titleFromFile(file);
+
+            const desc = document.createElement('span');
+            desc.textContent = file;
+
+            name.appendChild(strong);
+            name.appendChild(desc);
+            title.appendChild(icon);
+            title.appendChild(name);
+
+            const replies = document.createElement('span');
+            replies.className = 'post-meta';
+            replies.textContent = '0';
+
+            const updated = document.createElement('span');
+            updated.className = 'post-meta';
+            updated.textContent = '刚刚';
+
+            item.appendChild(title);
+            item.appendChild(replies);
+            item.appendChild(updated);
+            return item;
+        }
+
+        async function loadPosts() {
+            try {
+                const res = await fetch('posts/index.json', { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                const posts = Array.isArray(data.posts) ? data.posts : [];
+                postsContainer.textContent = '';
+
+                if (posts.length === 0) {
+                    postsContainer.innerHTML = '<div class="status-box">帖子清单为空。</div>';
+                    return;
+                }
+
+                posts.forEach((file, index) => {
+                    if (typeof file === 'string' && file.toLowerCase().endsWith('.md') && !file.includes('/') && !file.includes('\\')) {
+                        postsContainer.appendChild(createPostItem(file, index));
+                    }
+                });
+
+                if (!postsContainer.children.length) {
+                    postsContainer.innerHTML = '<div class="status-box">帖子清单格式无效。</div>';
+                }
+            } catch (err) {
+                console.error(err);
+                postsContainer.innerHTML = '<div class="status-box">帖子清单加载失败，请确认 posts/index.json 存在。</div>';
+            }
+        }
+
+        document.getElementById('post-btn').addEventListener('click', () => {
+            postNotice.style.display = postNotice.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+
+        document.getElementById('modal-close').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) modal.classList.remove('active');
+        });
+
+        document.getElementById('bot-login').addEventListener('click', () => {
+            window.location.href = 'inhuman/Sort/Sort.html';
+        });
+
+        document.getElementById('human-login').addEventListener('click', () => {
+            window.location.href = 'inhuman/Sisyphus/Sisyphus.html';
+        });
+
+        loadPosts();
+    </script>
+</body>
+</html>

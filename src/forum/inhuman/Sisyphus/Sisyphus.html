@@ -207,7 +207,7 @@
         isDragging = false;
         if (rollbackTimer) cancelAnimationFrame(rollbackTimer);
         updateSisyphusPosition();
-        closeOverlay();
+        overlay.style.display = 'none';
     }
 
     // 更新西西弗斯和石头的位置
@@ -316,7 +316,7 @@
         if (sliderValue > 95 && !isDragging) {
             // 石头停在山顶，通过验证
             // 可以添加成功动画或跳转
-            window.location.href = "https://www.bilibili.com/video/BV1GJ411x7h7";
+            window.location.href = "../Circle/Circle.html";
         } else {
             // 判定为非西西弗斯（即失败）
             showResult("检测到非西西弗斯行为", "日复一日，永无止境。石头甚至没有推到山顶，或者它滚回去了。你甚至不是一个合格的西西弗斯，更别说是神话中的神人了。");
